@@ -28,32 +28,38 @@ repositories {
     }
 }
 
-// We use shadow here to avoid the following dependencies being shadowed.
-// If you want to add your own dependency, you should also use 'shadow' most of the time.
-// Yet, if you want to include your dependency, use normal 'implementation' instead.
-dependencies {
-    shadow "org.ow2.asm:asm:${project.asm_version}"
-    shadow "org.ow2.asm:asm-analysis:${project.asm_version}"
-    shadow "org.ow2.asm:asm-commons:${project.asm_version}"
-    shadow "org.ow2.asm:asm-tree:${project.asm_version}"
-    shadow "org.ow2.asm:asm-util:${project.asm_version}"
+configurations {
+    includeImplementation // For including dependencies
+}
 
-    shadow("net.fabricmc:sponge-mixin:${project.mixin_version}") {
+// We use 'implementation' here to avoid the following dependencies being shadowed.
+// If you want to add your own dependency, you should also use 'implementation' most of the time.
+// And since we are building without Babric Loom, JIJ-dependencies are currently not usable.
+// Yet, if you really want to include your dependencies,
+// use 'includeImplementation' to shadow the dependencies into the archive.
+dependencies {
+    implementation "org.ow2.asm:asm:${project.asm_version}"
+    implementation "org.ow2.asm:asm-analysis:${project.asm_version}"
+    implementation "org.ow2.asm:asm-commons:${project.asm_version}"
+    implementation "org.ow2.asm:asm-tree:${project.asm_version}"
+    implementation "org.ow2.asm:asm-util:${project.asm_version}"
+
+    implementation("net.fabricmc:sponge-mixin:${project.mixin_version}") {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
     }
 
-    shadow "babric:fabric-loader:${project.loader_version}"
+    implementation "babric:fabric-loader:${project.loader_version}"
 
-    shadow "test-upload-repo-bta:bta:${project.bta_version}"
+    implementation "test-upload-repo-bta:bta:${project.bta_version}"
 
-    shadow "org.slf4j:slf4j-api:1.8.0-beta4"
-    shadow 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
+    implementation "org.slf4j:slf4j-api:1.8.0-beta4"
+    implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
     withSourcesJar()
 }
 
@@ -68,6 +74,7 @@ jar {
 }
 
 shadowJar {
+    configurations = [project.configurations.includeImplementation]
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}" }
     }
