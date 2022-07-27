@@ -14,4 +14,4 @@ And then you can start your modding trip!
 
 ### Extra Tips
 
-Since BTA is distributed without obfuscation, all Mixin classes must set the 'remap' option to false!
+* Since BTA is distributed without obfuscation, all Mixin classes must set the 'remap' option to false!
