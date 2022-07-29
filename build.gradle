@@ -29,14 +29,14 @@ repositories {
 }
 
 configurations {
-    includeImplementation // For including dependencies
+    include // For including dependencies
 }
 
 // We use 'implementation' here to avoid the following dependencies being shadowed.
 // If you want to add your own dependency, you should also use 'implementation' most of the time.
 // And since we are building without Babric Loom, JIJ-dependencies are currently not usable.
 // Yet, if you really want to include your dependencies,
-// use 'includeImplementation' to shadow the dependencies into the archive.
+// use 'include' to shadow the dependencies into the archive.
 dependencies {
     implementation "org.ow2.asm:asm:${project.asm_version}"
     implementation "org.ow2.asm:asm-analysis:${project.asm_version}"
@@ -74,7 +74,7 @@ jar {
 }
 
 shadowJar {
-    configurations = [project.configurations.includeImplementation]
+    configurations = [project.configurations.include]
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}" }
     }
