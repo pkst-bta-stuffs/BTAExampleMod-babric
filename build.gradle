@@ -21,7 +21,7 @@ repositories {
         url = 'https://maven.glass-launcher.net/babric'
     }
     ivy {
-        url = "https://github.com/Joe4422"
+        url = "https://github.com/Better-than-Adventure"
         patternLayout {
             artifact("[organisation]/releases/download/v[revision]/[module].jar")
             m2compatible = true
@@ -38,7 +38,7 @@ dependencies {
     minecraft("com.mojang:minecraft:b1.7.3") // Only used as a dummy, DO NOT use ANY classes from here!
     mappings "babric:barn:b1.7.3+build.5" // Only used as a dummy
 
-    implementation "test-upload-repo-bta:bta:${project.bta_version}" // Our actual Minecraft dependency - BTA
+    implementation "bta-download-repo:bta:${project.bta_version}" // Our actual Minecraft dependency - BTA
 
     modImplementation "babric:fabric-loader:${project.loader_version}"
 
