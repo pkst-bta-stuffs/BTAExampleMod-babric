@@ -4,7 +4,7 @@ plugins {
 }
 
 group = project.maven_group
-archivesBaseName = project.mod_name
+archivesBaseName = project.archive_base_name
 version = project.mod_version
 
 loom {
