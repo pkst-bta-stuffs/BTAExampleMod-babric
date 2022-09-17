@@ -3,7 +3,7 @@ plugins {
     id 'java'
 }
 
-group = project.mod_group
+group = project.maven_group
 archivesBaseName = project.mod_name
 version = project.mod_version
 
@@ -33,19 +33,19 @@ repositories {
 }
 
 dependencies {
-    minecraft "bta-download-repo:bta:${project.bta_version}"
-    mappings loom.layered() {} // Cheat Loom to apply no mappings on our BTA jar
+	minecraft "bta-download-repo:bta:${project.bta_version}"
+	mappings loom.layered() {} // Cheat Loom to apply no mappings on our BTA jar
 
-    modImplementation "babric:fabric-loader:${project.loader_version}"
+	modImplementation "babric:fabric-loader:${project.loader_version}"
 
-    implementation "org.slf4j:slf4j-api:1.8.0-beta4"
-    implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.16.0"
+	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
+	implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.16.0"
 }
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
-    withSourcesJar()
+	withSourcesJar()
 }
 
 tasks.withType(JavaCompile) {
@@ -53,15 +53,15 @@ tasks.withType(JavaCompile) {
 }
 
 jar {
-    from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}" }
-    }
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}" }
+	}
 }
 
 processResources {
-    inputs.property "version", project.version
+	inputs.property "version", project.version
 
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
 }
