@@ -8,28 +8,29 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 
 loom {
-    gluedMinecraftJar()
-    customMinecraftManifest.set("https://github.com/azurelmao/bta-manifest-repo/releases/download/v1.7.6.2_02/1.7.6.2_02.json")
+	gluedMinecraftJar()
+	noIntermediateMappings()
+	customMinecraftManifest.set("https://github.com/azurelmao/bta-manifest-repo/releases/download/v1.7.6.2_02/1.7.6.2_02.json")
 }
 
 repositories {
-    mavenCentral()
-    maven {
-        name = 'Babric'
-        url = 'https://maven.glass-launcher.net/babric'
-    }
-    maven {
-        name = 'Fabric'
-        url = 'https://maven.fabricmc.net/'
-    }
-    ivy {
-        url = "https://github.com/Better-than-Adventures"
-        patternLayout {
-            artifact("[organisation]/releases/download/v[revision]/[module].jar")
-            m2compatible = true
-        }
-        metadataSources { artifact() }
-    }
+	mavenCentral()
+	maven {
+		name = 'Babric'
+		url = 'https://maven.glass-launcher.net/babric'
+	}
+	maven {
+		name = 'Fabric'
+		url = 'https://maven.fabricmc.net/'
+	}
+	ivy {
+		url = "https://github.com/Better-than-Adventures"
+		patternLayout {
+			artifact("[organisation]/releases/download/v[revision]/[module].jar")
+			m2compatible = true
+		}
+		metadataSources { artifact() }
+	}
 }
 
 dependencies {
