@@ -15,4 +15,3 @@ And then you can start your modding trip!
 ### Extra Tips
 
 * Since BTA is distributed without obfuscation, all Mixin classes must set the 'remap' option to false!
-* We don't use Babric Loom to build, so JIJ dependencies are not usable for now!

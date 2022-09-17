@@ -1,66 +1,52 @@
 plugins {
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'babric-loom' version '1.0.+'
     id 'java'
 }
-// No babric loom here
 
-group = project.mod_group
-archivesBaseName = project.mod_name
+group = project.maven_group
+archivesBaseName = project.archives_base_name
 version = project.mod_version
 
+loom {
+	gluedMinecraftJar()
+	noIntermediateMappings()
+	customMinecraftManifest.set("https://github.com/azurelmao/bta-manifest-repo/releases/download/v1.7.6.2_02/1.7.6.2_02.json")
+}
+
 repositories {
-    mavenCentral()
-    maven {
-        name = 'Babric'
-        url = 'https://maven.glass-launcher.net/babric'
-    }
-    maven {
-        name = 'Fabric'
-        url = 'https://maven.fabricmc.net/'
-    }
-    ivy {
-        url = "https://github.com/Joe4422"
-        patternLayout {
-            artifact("[organisation]/releases/download/v[revision]/[module].jar")
-            m2compatible = true
-        }
-        metadataSources { artifact() }
-    }
+	mavenCentral()
+	maven {
+		name = 'Babric'
+		url = 'https://maven.glass-launcher.net/babric'
+	}
+	maven {
+		name = 'Fabric'
+		url = 'https://maven.fabricmc.net/'
+	}
+	ivy {
+		url = "https://github.com/Better-than-Adventures"
+		patternLayout {
+			artifact("[organisation]/releases/download/v[revision]/[module].jar")
+			m2compatible = true
+		}
+		metadataSources { artifact() }
+	}
 }
 
-configurations {
-    include // For including dependencies
-}
-
-// We use 'implementation' here to avoid the following dependencies being shadowed.
-// If you want to add your own dependency, you should also use 'implementation' most of the time.
-// And since we are building without Babric Loom, JIJ-dependencies are currently not usable.
-// Yet, if you really want to include your dependencies,
-// use 'include' to shadow the dependencies into the archive.
 dependencies {
-    implementation "org.ow2.asm:asm:${project.asm_version}"
-    implementation "org.ow2.asm:asm-analysis:${project.asm_version}"
-    implementation "org.ow2.asm:asm-commons:${project.asm_version}"
-    implementation "org.ow2.asm:asm-tree:${project.asm_version}"
-    implementation "org.ow2.asm:asm-util:${project.asm_version}"
+	minecraft "bta-download-repo:bta:${project.bta_version}"
+	mappings loom.layered() {} // Cheat Loom to apply no mappings on our BTA jar
 
-    implementation("net.fabricmc:sponge-mixin:${project.mixin_version}") {
-        exclude module: 'launchwrapper'
-        exclude module: 'guava'
-    }
+	modImplementation "babric:fabric-loader:${project.loader_version}"
 
-    implementation "babric:fabric-loader:${project.loader_version}"
-
-    implementation "test-upload-repo-bta:bta:${project.bta_version}"
-
-    implementation "org.slf4j:slf4j-api:1.8.0-beta4"
-    implementation 'org.apache.logging.log4j:log4j-slf4j18-impl:2.17.2'
+	implementation "org.slf4j:slf4j-api:1.8.0-beta4"
+	implementation "org.apache.logging.log4j:log4j-slf4j18-impl:2.16.0"
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-    withSourcesJar()
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+	withSourcesJar()
 }
 
 tasks.withType(JavaCompile) {
@@ -68,24 +54,15 @@ tasks.withType(JavaCompile) {
 }
 
 jar {
-    from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}" }
-    }
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}" }
+	}
 }
-
-shadowJar {
-    configurations = [project.configurations.include]
-    from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}" }
-    }
-}
-
-jar.finalizedBy tasks.shadowJar
 
 processResources {
-    inputs.property "version", project.version
+	inputs.property "version", project.version
 
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
 }
